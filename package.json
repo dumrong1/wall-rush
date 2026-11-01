@@ -1,0 +1,18 @@
+{
+  "name": "wall-rush-team-gates-experiment",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "start": "node serve.cjs",
+    "test:multiplayer": "node tests/multiplayer.cjs && node tests/multiplayer-3d.cjs && node tests/multiplayer-walls.cjs && node tests/multiplayer-shove.cjs && node tests/multiplayer-flags.cjs && node tests/multiplayer-powers.cjs && node tests/multiplayer-reliability.cjs && node tests/multiplayer-full-match.cjs",
+    "test:deploy": "node tests/deployment.cjs",
+    "test:reliability": "node tests/multiplayer-reliability.cjs",
+    "test:full-match": "node tests/multiplayer-full-match.cjs",
+    "test": "pnpm test:multiplayer && pnpm test:deploy"
+  },
+  "dependencies": {
+    "ws": "8.22.0"
+  }
+}

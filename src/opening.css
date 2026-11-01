@@ -1,0 +1,25 @@
+#opening{position:fixed;inset:0;z-index:100;background:#63bff0;overflow:hidden;isolation:isolate}
+.opening-art{position:absolute;width:100%;height:100%;object-fit:cover;object-position:center;animation:opening-arrive 1.3s cubic-bezier(.2,.7,.3,1) both}
+.opening-shade{position:absolute;inset:0;background:linear-gradient(transparent 65%,#082d4970 100%)}
+.opening-controls{position:absolute;bottom:max(22px,5vh);left:50%;transform:translateX(-50%);text-align:center;width:min(320px,85vw);animation:opening-controls .75s .35s both}
+#opening-play{width:100%;padding:17px 25px;border:3px solid #fff5cc;border-radius:19px;background:linear-gradient(#ffdc69,#efaa21);color:#17384c;font:1000 clamp(21px,3vw,28px) 'Trebuchet MS',system-ui,sans-serif;letter-spacing:.04em;box-shadow:0 7px 0 #a85820,0 12px 24px #08284070;transition:transform .16s,filter .16s}
+#opening-play:hover{transform:translateY(-3px);filter:brightness(1.08)}
+#opening-play:active{transform:translateY(4px)}
+#opening-play:focus-visible{outline:3px solid white;outline-offset:6px}
+.opening-controls p{margin:14px 0 0;color:white;font-size:14px;font-weight:900;letter-spacing:.1em;text-shadow:0 2px 5px #082840}
+.opening-sparks{position:absolute;inset:0;pointer-events:none}
+.opening-sparks i{position:absolute;bottom:8%;left:12%;width:7px;height:11px;background:#ffdc73;border-radius:2px;animation:opening-spark 5s linear infinite;opacity:0}
+.opening-sparks i:nth-child(2){left:29%;animation-delay:1.4s;background:#fff3c8}
+.opening-sparks i:nth-child(3){left:44%;animation-delay:2.8s}
+.opening-sparks i:nth-child(4){left:62%;animation-delay:.8s;background:#fff3c8}
+.opening-sparks i:nth-child(5){left:78%;animation-delay:3.5s}
+.opening-sparks i:nth-child(6){left:91%;animation-delay:2s;background:#fff3c8}
+.opening-leaving{pointer-events:none;animation:opening-exit .6s ease-in forwards}
+.opening-active{overflow:hidden}
+.opening-active .shell,.opening-active>.bunting{visibility:hidden}
+@keyframes opening-arrive{from{transform:scale(1.055);filter:brightness(.85)}to{transform:scale(1);filter:brightness(1)}}
+@keyframes opening-controls{from{opacity:0;translate:0 16px}to{opacity:1;translate:0 0}}
+@keyframes opening-spark{0%{transform:translateY(0) rotate(0);opacity:0}20%,65%{opacity:.65}100%{transform:translate(25px,-35vh) rotate(200deg);opacity:0}}
+@keyframes opening-exit{to{opacity:0;transform:scale(1.025)}}
+@media(max-aspect-ratio:4/5){.opening-art{object-fit:contain;background:#6bc7ed}.opening-shade{background:linear-gradient(#1a87c333,transparent 40%,#082d4970)}.opening-controls{bottom:9vh}}
+@media(prefers-reduced-motion:reduce){#opening *,#opening{animation:none!important;transition:none!important}.opening-sparks{display:none}}

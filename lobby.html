@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Wall Rush · Fort Rush Festival</title>
+  <link rel="stylesheet" href="./src/lobby.css">
+  <link rel="stylesheet" href="./src/opening.css">
+</head>
+<body>
+  <section id="opening" aria-label="Welcome to Wall Rush">
+    <img class="opening-art" src="./assets/ui/wall-rush-opening.png" alt="Wall Rush — Fort Rush Festival. Red and Blue Champions race through a colorful festival arena." fetchpriority="high">
+    <div class="opening-shade" aria-hidden="true"></div>
+    <div class="opening-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="opening-controls"><button id="opening-play" type="button">LET’S PLAY <span aria-hidden="true">➜</span></button><p>Build. Outplay. Capture.</p></div>
+  </section>
+  <div class="bunting" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <main class="shell">
+    <header class="hero">
+      <div class="hero-mark" aria-hidden="true"><span class="mark-red"></span><span class="mark-blue"></span><span class="mark-flag">⚑</span></div>
+      <h1>WALL <span>RUSH</span></h1>
+      <p>FORT RUSH FESTIVAL</p>
+    </header>
+
+    <section id="start-screen" class="screen start-screen" aria-label="Start game">
+      <p class="eyebrow">GATHER YOUR TEAM</p>
+      <form id="join-form">
+        <label for="join-code">JOIN ROOM</label>
+        <input id="join-code" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ENTER CODE" aria-describedby="error-message">
+        <button class="big-button join-button" type="submit">JOIN <span aria-hidden="true">➜</span></button>
+      </form>
+      <div class="divider"><span>OR</span></div>
+      <button id="create-room" class="big-button create-button" type="button">CREATE ROOM <span aria-hidden="true">✦</span></button>
+      <a class="practice-link" href="./index.html?arena=wetlands-v3&rules=gates&buildmove=1&pickups=contested&practice=1">Practice vs Bot <span aria-hidden="true">➜</span></a>
+      <p class="test-note">Create or join to play online with a friend.<br>Practice solo against the bot.</p>
+    </section>
+
+    <section id="room-panel" class="screen room-screen" aria-label="Room lobby" hidden>
+      <p class="eyebrow">YOUR ROOM CODE</p>
+      <h2 id="room-code" aria-live="polite">------</h2>
+      <button id="copy-code" class="small-button" type="button">COPY CODE</button>
+      <div class="players" aria-label="Player slots">
+        <div id="red-slot" class="player-slot red-slot"><span class="player-icon" aria-hidden="true">R</span><span class="slot-text"><strong>RED PLAYER</strong><small id="red-status">Waiting…</small></span></div>
+        <div id="blue-slot" class="player-slot blue-slot"><span class="player-icon" aria-hidden="true">B</span><span class="slot-text"><strong>BLUE PLAYER</strong><small id="blue-status">Waiting…</small></span></div>
+      </div>
+      <p id="your-role" class="role-note"></p>
+      <p id="room-phase" class="room-phase" aria-live="polite">Waiting for another player…</p>
+      <button id="ready-button" class="big-button ready-button" type="button">I'M READY <span aria-hidden="true">✓</span></button>
+      <a id="leave-room" class="leave-link" href="./">Leave Room</a>
+      <p class="test-note">Both flags matter · bank theirs and bring yours home</p>
+    </section>
+
+    <section id="debug-panel" class="debug-panel" aria-label="Developer network view" hidden>
+      <div class="debug-heading"><strong>NETWORK TEST</strong><span id="connection">Connecting…</span></div>
+      <p>WASD sends movement input. The server controls positions, gates, combat, flags and powers.</p>
+      <div id="demo-panel" hidden>
+        <canvas id="demo-canvas" width="350" height="510" aria-label="Server-authoritative Red and Blue positions"></canvas>
+        <p id="position-readout"></p>
+      </div>
+    </section>
+
+    <p id="error-message" class="error-message" role="alert" hidden></p>
+    <footer><button id="debug-toggle" type="button" aria-expanded="false">Developer view</button></footer>
+  </main>
+  <script type="module" src="./src/lobby.js"></script>
+  <script type="module" src="./src/opening.js"></script>
+</body>
+</html>

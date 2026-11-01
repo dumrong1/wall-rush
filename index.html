@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Wall Rush · Fort Rush Festival</title>
+  <script>if(!location.search)location.replace('./');</script>
+  <link rel="stylesheet" href="./src/style.css" />
+  <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
+</head>
+<body>
+  <main id="app">
+    <div id="game" aria-label="3D Wall Rush game"></div>
+    <div class="hud">
+      <div class="topbar">
+        <div class="brand">
+          <strong id="arena-title">WALL RUSH · FESTIVAL WETLANDS</strong>
+          <span><span id="arena-size">5×14</span> Bank-the-Flag · reclaimable secured flags · 2.7s wall breaking · 90% carrier speed<span id="build-mode-label"></span><span id="pickup-mode-label"></span></span>
+        </div>
+        <div class="stats">
+          <span class="pill red" id="playerHud">YOU</span>
+          <span class="pill blue" id="botHud">BOT</span>
+          <span class="pill" id="timeHud">0:00</span>
+        </div>
+      </div>
+      <a id="spectate-link" href="?spectator=1&arena=wetlands" style="pointer-events:auto;position:absolute;right:108px;top:86px;background:#fff;color:#18223a;padding:7px 10px;border-radius:8px;font-size:12px">Bot vs Bot</a>
+      <select id="arena-select" aria-label="Arena" style="pointer-events:auto;position:absolute;right:12px;top:130px;padding:7px;border-radius:8px"><option value="wetlands">Festival Wetlands</option><option value="wetlands-v2">Wetlands V2 (experimental)</option><option value="wetlands-v3">Wetlands V3 (experimental)</option><option value="baseline">Original arena</option></select>
+      <select id="rules-select" aria-label="Wall rules" style="pointer-events:auto;position:absolute;right:12px;top:173px;padding:7px;border-radius:8px"><option value="normal">Normal Walls</option><option value="gates">Team Gates (experimental)</option></select>
+      <button id="restart" type="button">Restart</button>
+      <div class="audio-controls">
+        <button id="mute-button" type="button" aria-label="Toggle game sound" aria-pressed="false">Sound: On</button>
+        <label for="volume-slider">Volume</label>
+        <input id="volume-slider" type="range" min="0" max="100" value="65" aria-label="Master game volume" />
+        <output id="volume-value" for="volume-slider">65%</output>
+      </div>
+      <div class="center-card" id="centerCard">
+        <div class="big" id="centerBig">3</div>
+        <div class="small" id="centerSmall">Bank the enemy flag AND recover your own flag to win.</div>
+      </div>
+      <div class="bottom">
+        <div class="controls">
+          <a class="game-menu-link" href="./">Main Menu · Play Online</a>
+          <strong id="game-mode-label">Practice vs Bot</strong><br />
+          <b>Move</b> <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> &nbsp;·&nbsp;
+          <b>Build</b> hold <kbd>F</kbd> &nbsp;·&nbsp;
+          <b>Smash wall</b> hold <kbd>G</kbd> &nbsp;·&nbsp;
+          <b>Attack / Shove opponent</b> <kbd>SPACE</kbd> &nbsp;·&nbsp;
+          <b>Use power</b> <kbd>H</kbd><br />
+          Wetlands: turquoise water slows movement to <span id="water-speed-label">27.5%</span>; building is allowed on any open in-bounds grid edge, including water, bases, and the arena perimeter. Each team keeps up to 12 walls; a 13th replaces its oldest. Left pole = HOME flag. Gold right pole = CAPTURE pole. Steal / return flags by touching them. Steal BLUE, return it to your gold pole, and keep RED at home. If both players shove together they CLASH: both recoil, neither flag drops. A successful shove throws a carried flag 1.25–2.0 units from the victim. Flags can fly over walls; players cannot. Recover a dropped home flag by touching it after it lands. Flag carriers move at 90% speed, cannot Dash, build walls more slowly, and must hold the gold capture pole for 1 second. Dropped flags do NOT auto-return. They stay where they fall until the owner touches them to return them or the opponent steals them again.
+        </div>
+        <div class="action-panel">
+          <div class="action-label"><span id="actionLabel">Ready</span><span class="power-hint">F / G / H</span></div>
+          <div class="meter"><i id="actionMeter"></i></div>
+          <div class="action-label" style="margin-top:8px"><span id="captureText">SPACE attacks OPPONENT · Red flag home · Blue flag home</span></div>
+          <div class="meter capture"><i id="captureMeter"></i></div>
+        </div>
+      </div>
+    </div>
+    <div id="online-overlay" hidden>
+      <div class="online-top"><strong>WALL RUSH · WETLANDS V3</strong><span id="online-role">Connecting…</span><span id="online-rules"></span><span id="online-room"></span><span id="online-counts">RED 0/12 · BLUE 0/12</span><span id="online-flags">RED FLAG HOME · BLUE FLAG HOME</span><span id="online-power">NO POWER · H TO USE</span></div>
+      <div id="online-message" class="online-message">Joining the shared arena…</div>
+      <div id="online-victory" hidden><strong>RED WINS!</strong><span>Enemy flag banked · home flag secured</span><a href="./">Back to Rooms</a></div>
+      <div class="online-bottom"><span>WASD move · F build · G break · SPACE shove · H power</span><span>Bank the enemy flag while protecting your own</span><a id="online-leave" href="./">Leave Room</a></div>
+    </div>
+  </main>
+  <script>
+    const p=new URLSearchParams(location.search),a=document.getElementById('arena-select');
+    a.value=['wetlands','wetlands-v2','wetlands-v3','baseline'].includes(p.get('arena'))?p.get('arena'):'wetlands';
+    document.getElementById('arena-title').textContent=a.value==='wetlands-v3'?'WALL RUSH · WETLANDS V3':a.value==='wetlands-v2'?'WALL RUSH · WETLANDS V2':a.value==='baseline'?'WALL RUSH · ORIGINAL ARENA':'WALL RUSH · FESTIVAL WETLANDS';
+    document.getElementById('arena-size').textContent=a.value==='wetlands-v3'?'7×17':'5×14';
+    document.getElementById('game-mode-label').textContent=p.get('online')==='1'?'Online Multiplayer':p.get('spectator')==='1'?'Bot vs Bot Spectator':'Practice vs Bot';
+    a.onchange=()=>{p.set('arena',a.value);location.search=p};
+    const r=document.getElementById('rules-select');r.value=p.get('rules')==='gates'?'gates':'normal';
+    r.onchange=()=>{p.set('rules',r.value);location.search=p};
+    const moving=r.value==='gates'&&p.get('buildmove')==='1';
+    const contested=a.value==='wetlands-v3'&&r.value==='gates'&&p.get('pickups')==='contested';
+    document.getElementById('build-mode-label').textContent=moving?' · MOVE-BUILD 40%':'';
+    document.getElementById('pickup-mode-label').textContent=contested?' · CONTESTED POWERS':'';
+    document.getElementById('spectate-link').href='?spectator=1&arena='+a.value+'&rules='+r.value+(moving?'&buildmove=1':'')+(contested?'&pickups=contested':'');
+    if(p.get('mapshot')==='1'){
+      document.querySelector('.hud').style.display='none';
+      if(contested){
+        const label=document.createElement('div');
+        label.style.cssText='position:fixed;top:14px;left:14px;z-index:10;background:#18223add;color:#fff;padding:8px 12px;border-radius:8px;font:14px system-ui';
+        label.textContent='WETLANDS V3 · GOLD RINGS = CONTESTED POWER PADS (WEST / EAST CROSSINGS + NORTH / SOUTH JUNCTIONS)';
+        document.body.appendChild(label);
+      }
+    }
+  </script>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: wall-rush-multiplayer
+    runtime: node
+    plan: free
+    numInstances: 1
+    buildCommand: corepack enable && pnpm install --frozen-lockfile --prod
+    startCommand: node serve.cjs
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production

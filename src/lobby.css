@@ -1,0 +1,56 @@
+:root{font-family:"Trebuchet MS",system-ui,sans-serif;color:#fff9e9;background:#063b45}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{min-height:100%;background:#063b45}
+body{margin:0;min-height:100svh;overflow-x:hidden;background:radial-gradient(ellipse at 50% 22%,#188d8e 0%,#0d6570 37%,#084d59 66%,#063b45 100%)}
+body::before,body::after{content:"";position:fixed;pointer-events:none;border:3px solid #a2e4ba28;border-radius:50%;transform:rotate(-19deg)}
+body::before{width:125vw;height:40vh;left:-30vw;bottom:-26vh}
+body::after{width:105vw;height:32vh;right:-33vw;bottom:-21vh}
+.bunting{position:fixed;top:0;left:0;width:100%;height:49px;display:flex;justify-content:center;gap:clamp(9px,2vw,24px);overflow:hidden;pointer-events:none;z-index:1}
+.bunting::before{content:"";position:absolute;top:4px;left:0;width:100%;border-top:3px solid #fce1a7a8;transform:rotate(-1deg)}
+.bunting i{width:24px;height:34px;clip-path:polygon(0 0,100% 0,50% 100%);background:#f4c34e;transform:rotate(5deg);box-shadow:0 2px #0003}
+.bunting i:nth-child(3n+1){background:#e74b58;transform:rotate(-8deg)}
+.bunting i:nth-child(3n+2){background:#42a9ea;transform:rotate(8deg)}
+.shell{position:relative;z-index:2;width:min(540px,calc(100% - 36px));min-height:100svh;margin:auto;padding:54px 0 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.hero{width:100%;margin:0 0 clamp(16px,3vh,32px)}
+.hero-mark{position:relative;width:74px;height:53px;margin:0 auto 7px;filter:drop-shadow(0 5px 0 #062f3a88)}
+.hero-mark span{position:absolute;display:block}.mark-red,.mark-blue{width:30px;height:38px;bottom:2px;border-radius:10px 10px 6px 6px;border:3px solid #ffe1a3}.mark-red{left:8px;background:#dc344a;transform:rotate(-18deg)}.mark-blue{right:8px;background:#288ae5;transform:rotate(18deg)}.mark-flag{left:21px;top:-8px;color:#ffe18e;font-size:37px;text-shadow:2px 3px #093d44}
+h1{font-family:"Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif;margin:0;font-size:clamp(52px,11vw,86px);font-weight:1000;letter-spacing:-.075em;line-height:.9;white-space:nowrap;color:#fff3c6;text-shadow:0 6px 0 #063a46,0 10px 10px #00263188}
+h1 span{color:#ffd05b;text-shadow:0 6px 0 #a43c36,0 10px 10px #00263188}
+.hero p{margin:13px 0 0;color:#ffe7a9;font-size:clamp(13px,2.5vw,17px);font-weight:1000;letter-spacing:.23em;text-shadow:0 2px #06444f}
+.screen{width:min(430px,100%)}
+.eyebrow{margin:0 0 14px;color:#b2ecdb;font-weight:1000;font-size:13px;letter-spacing:.18em}
+.start-screen form{display:flex;flex-direction:column;gap:11px}
+label{font-size:clamp(21px,5vw,27px);font-weight:1000;letter-spacing:.08em;text-shadow:0 3px #063946}
+#join-code{width:100%;height:66px;border:4px solid #ffe8a9;border-radius:16px;background:#fff9eb;color:#153f4a;font:1000 clamp(24px,6vw,34px) "Trebuchet MS",system-ui,sans-serif;text-align:center;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 6px 0 #062d39aa;outline:none}
+#join-code::placeholder{color:#87a2a1;letter-spacing:.08em}
+#join-code:focus-visible{border-color:#f8bd3d;box-shadow:0 0 0 4px #fff7,0 6px 0 #062d39aa}
+#join-code.invalid{border-color:#ef6570}
+button{font-family:inherit;cursor:pointer}
+.big-button{position:relative;width:100%;min-height:61px;border:3px solid #fff2ce;border-radius:17px;color:white;font-size:21px;font-weight:1000;letter-spacing:.04em;box-shadow:0 7px 0 #032e3bbb,0 11px 15px #00222a55;transition:transform .12s ease,box-shadow .12s ease,filter .12s ease}
+.big-button span{position:absolute;right:19px;top:50%;transform:translateY(-50%);font-size:25px}
+.big-button:hover{filter:brightness(1.08);transform:translateY(-2px)}.big-button:active{transform:translateY(5px);box-shadow:0 2px 0 #032e3bbb}
+.big-button:focus-visible,.small-button:focus-visible,.practice-link:focus-visible,.leave-link:focus-visible,footer button:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.join-button{background:#d93650}.create-button{background:#2b86df}
+.divider{display:flex;align-items:center;gap:14px;margin:18px 0;color:#bce4d5;font-size:12px;font-weight:900;letter-spacing:.18em}.divider::before,.divider::after{content:"";height:2px;background:#ffffff52;flex:1}
+.practice-link{display:inline-block;margin-top:23px;color:#fff8d7;font-size:17px;font-weight:900;text-underline-offset:5px;text-decoration-thickness:2px}.practice-link:hover{color:#ffd55d}
+.test-note{margin:17px 0 0;color:#c1e2d9;font-size:12px;font-weight:800;letter-spacing:.03em}
+.room-screen .eyebrow{margin-bottom:0}
+#room-code{margin:0;color:#ffda70;font-size:clamp(50px,13vw,76px);font-weight:1000;letter-spacing:.1em;line-height:1.1;text-shadow:0 5px 0 #a13d34,0 9px 12px #00232a77}
+.small-button{border:2px solid #ffe8a8;background:#123f4f;color:#fff4cb;border-radius:100px;padding:8px 20px;font-size:13px;font-weight:1000;letter-spacing:.07em;box-shadow:0 3px 0 #022a34}.small-button:hover{background:#1b6573}
+.players{display:grid;gap:10px;margin:23px 0 12px;text-align:left}
+.player-slot{display:flex;align-items:center;gap:14px;min-height:67px;padding:8px 15px;border-radius:18px;border:3px solid #fff2cc;box-shadow:0 5px 0 #05343c99;transition:transform .2s ease}
+.player-slot.ready{transform:scale(1.015)}.red-slot{background:#cc354d}.blue-slot{background:#247bd0}
+.player-icon{display:grid;place-items:center;flex:none;width:43px;height:43px;border-radius:50%;background:#fff1ce;color:#a23c42;font-size:25px;font-weight:1000;box-shadow:0 3px #062e3b6b}.blue-slot .player-icon{color:#245fae}
+.slot-text{display:flex;flex-direction:column;line-height:1.1}.slot-text strong{font-size:17px;letter-spacing:.04em}.slot-text small{margin-top:5px;font-size:13px;color:#fff8dc;font-weight:900}
+.role-note{margin:5px 0 0;color:#d0eee4;font-size:13px;font-weight:900}.room-phase{min-height:25px;margin:10px 0 12px;font-size:17px;font-weight:1000;color:#ffe2a2}
+.ready-button{background:#efae35;color:#173e45;text-shadow:none}.ready-button.is-ready{background:#2fbd8c;color:#123e3f}
+.leave-link{display:inline-block;margin-top:17px;color:#f6e8cb;text-decoration:underline;text-underline-offset:4px;font-size:14px;font-weight:900}
+.debug-panel{width:min(540px,100%);margin:18px 0 0;border:2px dashed #c2e8d199;border-radius:14px;background:#042f3ccf;padding:14px;text-align:left;font-size:12px}.debug-heading{display:flex;justify-content:space-between;gap:10px;color:#ffdc84}.debug-panel p{line-height:1.45}
+#demo-canvas{display:block;margin:10px auto;width:min(260px,100%);height:auto;border:4px solid #8abb99;border-radius:8px}#position-readout{font:11px ui-monospace,monospace;overflow-wrap:anywhere}
+.error-message{position:fixed;z-index:5;top:48px;left:50%;transform:translateX(-50%);width:min(440px,calc(100% - 30px));margin:0;padding:13px 17px;border:3px solid #fff5cf;border-radius:13px;background:#b72c41;color:white;font-size:15px;font-weight:900;box-shadow:0 7px 0 #032b36aa}
+footer{margin-top:19px}footer button{border:0;background:transparent;color:#b9e4da;font-size:12px;text-decoration:underline;text-underline-offset:3px}footer button:hover{color:white}
+@media(max-height:730px){.shell{padding-top:43px}.hero{margin-bottom:14px}.hero-mark{transform:scale(.8);height:42px;margin-bottom:2px}h1{font-size:clamp(45px,9vw,67px)}.hero p{margin-top:8px}.big-button{min-height:54px}.players{margin-top:14px}}
+@media(max-width:480px){.shell{width:min(430px,calc(100% - 34px))}.bunting{gap:9px}.bunting i{width:18px;height:27px}.player-slot{min-height:61px}#join-code{height:61px}.test-note{margin-top:14px}}
+@media(max-height:600px){.shell{padding-top:23px}.hero{margin-bottom:5px}.hero-mark{transform:scale(.65);height:31px;margin-bottom:0}.hero p{margin-top:5px}.eyebrow{margin-bottom:7px}.start-screen form{gap:6px}#join-code{height:52px}.big-button{min-height:49px}.divider{margin:10px 0}.practice-link{margin-top:11px}.test-note{margin-top:8px}.players{margin:9px 0 6px;gap:7px}.player-slot{min-height:48px;padding:5px 12px}.room-screen #room-code{font-size:clamp(46px,13vw,70px)}.room-phase{margin:5px 0 6px}.leave-link{margin-top:6px}footer{margin-top:5px}}
+@media(prefers-reduced-motion:reduce){.big-button,.player-slot{transition:none}}
