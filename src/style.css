@@ -74,3 +74,24 @@ kbd { color:white; background:#2b3453; border:1px solid #4a567f; border-bottom-w
   .audio-controls label, .audio-controls output { display:none; }
   .audio-controls input { width:54px; }
 }
+
+/* Normal play: only the compact match HUD. Detailed controls remain in ?debug=1. */
+body:not(.debug-ui) .topbar,body:not(.debug-ui) .bottom,
+body:not(.debug-ui) #spectate-link,body:not(.debug-ui) #arena-select,
+body:not(.debug-ui) #rules-select,body:not(.debug-ui) #restart,
+body:not(.debug-ui) .online-top,body:not(.debug-ui) .online-bottom{display:none!important}
+#compact-hud{position:absolute;z-index:15;left:12px;top:12px;width:min(410px,calc(100% - 255px));max-width:calc(100% - 255px);display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:10px 14px;border:2px solid #ffde94;border-radius:15px;background:#073f50dd;box-shadow:0 5px 0 #06334344;color:#fff5d7;font:800 12px 'Trebuchet MS',system-ui;pointer-events:none}
+#compact-team{color:#ff9da5}#compact-hud[data-team=blue] #compact-team{color:#9cd2ff}
+#compact-power{color:#ffe184}#compact-time{font-variant-numeric:tabular-nums}
+#compact-flags{flex-basis:100%;font-size:12px}#compact-action{font-size:11px;color:#bfe6d7;flex-basis:100%}
+.play-tools{position:absolute;right:12px;top:12px;z-index:20;display:flex;gap:6px;align-items:center}
+.play-tools a,.play-tools button{border:2px solid #ffdc83;border-radius:10px;padding:7px 11px;background:#0b5265;color:#fff5d7;font:900 13px 'Trebuchet MS',system-ui;text-decoration:none;cursor:pointer}
+.play-tools button{border-radius:50%;width:34px;padding:7px 0}
+.play-tools :focus-visible{outline:3px solid white;outline-offset:3px}
+#app>.audio-controls{top:58px;right:12px;z-index:20;background:#073f50dd;box-shadow:none}
+#app>.audio-controls label,#app>.audio-controls output{display:none}
+#app>.audio-controls input{width:55px}#mute-button{font-size:11px;padding:6px 7px;background:#fff0c7;color:#164352}
+body.debug-ui #compact-hud{top:auto;bottom:165px}body.debug-ui .play-tools{top:215px}
+body.tutorial-blocking #app>.hud>.center-card{visibility:hidden}
+@media(max-width:650px){#compact-hud{width:min(350px,calc(100% - 132px));max-width:calc(100% - 132px);font-size:11px;gap:5px 9px;padding:8px 10px}#compact-flags{font-size:10px}#compact-action{font-size:10px}#app>.audio-controls{top:58px}#app>.audio-controls input{width:35px}}
+@media(max-width:450px){#app>.audio-controls{top:100px}}

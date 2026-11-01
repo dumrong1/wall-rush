@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {createTutorial} from './tutorial.js';
 import { createGridMapping } from './grid.js';
 import { createGateSystem } from './gate-visuals.js';
 import { createWallEffects } from './wall-effects.js';
@@ -36,6 +37,11 @@ const online={team:null,socket:null,seq:0,samples:{red:[],blue:[]},latestTick:0,
   reconnectStarted:0,reconnectTimer:null,inputTimer:null,reconnecting:false};
 if(onlineMode)document.body.classList.add('online-mode');
 const spectatorMode=new URLSearchParams(location.search).get('spectator')==='1';
+const debugUI=onlineParams.get('debug')==='1';
+document.body.classList.toggle('debug-ui',debugUI);
+const tutorial=createTutorial();
+if(!onlineMode&&!spectatorMode&&onlineParams.get('mapshot')!=='1')tutorial.ensure();
+document.querySelector('#game-help').addEventListener('click',()=>tutorial.show({nonblocking:onlineMode||state.running,team:onlineMode?online.team||'red':'red'}));
 let spectator=null;
 function gameRandom(){return spectator?spectator.random():Math.random();}
 
@@ -72,6 +78,7 @@ const muteButton = $('#mute-button');
 const volumeSlider = $('#volume-slider');
 const volumeValue = $('#volume-value');
 const audio=createGameAudio();
+document.querySelector('#app').appendChild(document.querySelector('.audio-controls'));
 function updateMuteButton(){if(!muteButton)return;muteButton.textContent=audio.muted?'Sound: Off':'Sound: On';muteButton.setAttribute('aria-pressed',String(audio.muted));}
 function updateVolumeControl(){if(volumeSlider)volumeSlider.value=String(Math.round(audio.volume*100));if(volumeValue)volumeValue.textContent=Math.round(audio.volume*100)+'%';}
 updateMuteButton();
@@ -632,7 +639,7 @@ function resetGame() {
   camera.userData.look = null;
   centerCard.classList.add('show');
   centerBig.textContent = '3';
-  centerSmall.textContent = 'No auto-return timer. Shove a carrier → the flag stays on the ground. Touch your own dropped flag to return it; touch the enemy flag to steal it.';
+  centerSmall.textContent = 'Ready to rush?';
   updateMeshes();
 }
 restart.addEventListener('click', () => spectator?spectator.restart():resetGame());
@@ -1335,26 +1342,39 @@ humanPlacementPreview=createPlacementPreview({state,spectatorMode,targetEdge:fac
 
 const keys = new Set();
 const justPressed = new Set();
+const rawMovementKeys=new Set();
+const movementAliases={ArrowUp:'KeyW',ArrowDown:'KeyS',ArrowLeft:'KeyA',ArrowRight:'KeyD'};
+window.addEventListener('wall-rush-tutorial-opened',()=>{
+  keys.clear();justPressed.clear();rawMovementKeys.clear();camera.userData.inputYaw=null;
+  if(onlineMode)sendOnlineInput();
+});
 window.addEventListener('keydown', (e) => {
+  if(tutorial.blocking||e.target.closest?.('input,select,textarea')||
+    (e.code==='Space'&&e.target.closest?.('button,a')))return;
+  const code=movementAliases[e.code]||e.code;
+  if(['KeyW','KeyA','KeyS','KeyD'].includes(code))rawMovementKeys.add(e.code);
   if(onlineMode){
-    if(['KeyW','KeyA','KeyS','KeyD','KeyF','KeyG','KeyH','Space'].includes(e.code)){
-      e.preventDefault();if(keys.has(e.code))return;
-      keys.add(e.code);audio.unlock();sendOnlineInput();
+    if(['KeyW','KeyA','KeyS','KeyD','KeyF','KeyG','KeyH','Space'].includes(code)){
+      e.preventDefault();if(keys.has(code))return;
+      keys.add(code);audio.unlock();sendOnlineInput();
     }
     return;
   }
   if (spectatorMode) return;
-  if (['KeyW','KeyA','KeyS','KeyD','KeyF','KeyG','KeyH','Space'].includes(e.code)) e.preventDefault();
-  if (!keys.has(e.code)) justPressed.add(e.code);
-  keys.add(e.code);
+  if (['KeyW','KeyA','KeyS','KeyD','KeyF','KeyG','KeyH','Space'].includes(code)) e.preventDefault();
+  if (!keys.has(code)) justPressed.add(code);
+  keys.add(code);
   audio.unlock();
 });
 window.addEventListener('keyup', e => {
-  keys.delete(e.code);
+  const code=movementAliases[e.code]||e.code;
+  rawMovementKeys.delete(e.code);
+  if(![...rawMovementKeys].some(raw=>(movementAliases[raw]||raw)===code))keys.delete(code);
   if(onlineMode){sendOnlineInput();return;}
   if (!['KeyW','KeyA','KeyS','KeyD'].some(key=>keys.has(key))) camera.userData.inputYaw=null;
 });
 window.addEventListener('blur', () => {
+  rawMovementKeys.clear();
   keys.clear();justPressed.clear();camera.userData.inputYaw=null;
   if(onlineMode)sendOnlineInput();
 });
@@ -2212,6 +2232,21 @@ function updateUI(){
   captureText.textContent=`SPACE attack: ${p.shoveCooldown<=0?'READY':`${Math.ceil(p.shoveCooldown*10)/10}s`} · ${ownText} · ${enemyText}${fightText}`;
 }
 
+function updateCompactHud(){
+  const team=onlineMode?online.team||'red':'red',p=team==='red'?state.player:state.bot;
+  const hud=$('#compact-hud');hud.dataset.team=team;
+  $('#compact-team').textContent=spectatorMode?'SPECTATOR':team.toUpperCase()+' TEAM';
+  const count=side=>onlineMode?online.walls.filter(w=>w.team===side||w.owner===side).length:state.wallOrder[side].length;
+  $('#compact-walls').textContent=spectatorMode?`Walls R ${count('red')} · B ${count('blue')}`:`Walls ${count(team)}/${MAX_WALLS}`;
+  $('#compact-power').textContent=p.power?`${p.power.toUpperCase()} · H${p.power==='dash'&&p.carryingFlag?' (locked)':''}`:'No power · H';
+  $('#compact-time').textContent=`${Math.floor(state.elapsed/60)}:${String(Math.floor(state.elapsed%60)).padStart(2,'0')}`;
+  const flagLabel=side=>{const flag=onlineMode?online.flags?.[side]:state.flags[side];
+    const carrier=typeof flag?.carrier==='string'?flag.carrier:flag?.carrier?.team;
+    return side.toUpperCase()+' ⚑ '+(!flag?'…':flag.status==='carried'?`with ${carrier?.toUpperCase()||'rival'}`:flag.status==='banked'?`banked at ${flag.bankedAt?.toUpperCase()}`:flag.status);};
+  $('#compact-flags').textContent=flagLabel('red')+' · '+flagLabel('blue');
+  $('#compact-action').textContent=p.build>0?'F · Building…':p.dig>0?'G · Breaking…':p.captureProgress>0?'Banking…':`F · Build ready   SPACE · ${p.shoveCooldown>0?Math.ceil(p.shoveCooldown)+'s':'Ready'}`;
+}
+
 function updatePowerVisuals(dt){
   for(const p of state.powerups){
     p.t+=dt;
@@ -2546,12 +2581,12 @@ function tick(){
     if(charactersReady&&online.team)renderOnlinePositions();
   } else if (spectatorMode) {
     spectator?.tick(dt);
-  } else if(charactersReady && !state.winner){
+  } else if(charactersReady && !state.winner && !tutorial.blocking){
     if(state.countdown>0){
       state.countdown-=dt;
       const n=Math.ceil(state.countdown);
       centerBig.textContent=state.countdown>.1?String(Math.max(1,n)):'GO!';
-      centerSmall.textContent='Steal the enemy flag, bring it home, and protect your own. SPACE shoves a carrier and drops the flag.';
+      centerSmall.textContent='Ready to rush?';
       centerCard.classList.add('show');
       if(state.countdown<=0){ state.running=true; centerCard.classList.remove('show'); }
     } else if(state.running){
@@ -2584,6 +2619,7 @@ function tick(){
   updateCamera(dt);
   updateObjectiveOcclusion(dt);
   if(!onlineMode)updateUI();
+  updateCompactHud();
   animateCharacters(visualDt);
   wallEffects?.update(visualDt);
   waterEffects.update(visualDt,[state.player,state.bot]);

@@ -1,3 +1,5 @@
+import {createTutorial} from './tutorial.js';
+const tutorial=createTutorial();
 const $=selector=>document.querySelector(selector);
 const start=$('#start-screen'),roomPanel=$('#room-panel'),demoPanel=$('#demo-panel'),debugPanel=$('#debug-panel');
 const connection=$('#connection'),errorMessage=$('#error-message'),readyButton=$('#ready-button');
@@ -26,6 +28,7 @@ function friendlyError(reason){
 }
 function enterArena(){
   if(enteringArena||!code)return;
+  tutorial.close(false);
   enteringArena=true;
   location.assign('./index.html?arena=wetlands-v3&rules='+roomRules+'&buildmove='+(roomBuildMove?'1':'0')+'&online=1&room='+encodeURIComponent(code));
 }
@@ -58,6 +61,7 @@ function onMessage(message){
     roomCode.textContent=code;$('#your-role').textContent='YOU ARE '+team.toUpperCase();
     start.hidden=true;roomPanel.hidden=false;showError('');
     if(message.phase==='playing')enterArena();
+    else tutorial.ensure({team});
     return;
   }
   if(message.type==='lobby'&&message.code===code){lobby=message;updateLobby();return;}
@@ -88,7 +92,17 @@ $('#join-form').addEventListener('submit',event=>{
   showError('');
   send({type:'join',code:id,token:sessionStorage.getItem('wall-rush-room-'+id)||undefined});
 });
-readyButton.addEventListener('click',()=>send({type:'ready',ready:!ready}));
+readyButton.addEventListener('click',async()=>{
+  const currentCode=code;
+  await tutorial.ensure({team});
+  if(code===currentCode&&!enteringArena)send({type:'ready',ready:!ready});
+});
+$('#tutorial-help').addEventListener('click',()=>{
+  // Withdraw an already-ready player before reopening blocking pre-match help.
+  if(ready)send({type:'ready',ready:false});
+  tutorial.show({team:team||'red'});
+});
+debugToggle.hidden=!debugMode;
 copyButton.addEventListener('click',async()=>{
   try{await navigator.clipboard.writeText(code);copyButton.textContent='COPIED!';setTimeout(()=>copyButton.textContent='COPY CODE',1600);}
   catch{showError('Copy unavailable. Select the code above to share it.');}
