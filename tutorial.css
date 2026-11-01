@@ -1,0 +1,62 @@
+#party-tutorial[hidden]{display:none!important}
+body.tutorial-blocking{overflow:hidden}
+#party-tutorial{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:16px;background:#032e4594;backdrop-filter:blur(7px);font-family:'Trebuchet MS',system-ui,sans-serif;color:#fff4d7}
+.tutorial-card{width:min(580px,100%);max-height:calc(100svh - 28px);overflow:auto;padding:24px 28px;background:linear-gradient(155deg,#116e78,#083e51);border:3px solid #ffdc85;border-radius:27px;box-shadow:0 14px 0 #052b40,0 25px 70px #001c4290;text-align:center;animation:tutorial-enter .25s ease-out}
+.tutorial-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;letter-spacing:.12em;font-weight:900;color:#bce9d8}
+#party-tutorial button{font:900 16px 'Trebuchet MS',system-ui,sans-serif;cursor:pointer;border-radius:12px;border:2px solid #ffe4a1;padding:10px 19px;background:#ffe08a;color:#173e50;box-shadow:0 4px #a77324}
+#party-tutorial button:focus-visible{outline:3px solid white;outline-offset:4px}#party-tutorial button:disabled{opacity:.35;cursor:default}
+#party-tutorial .tutorial-skip{border:0;box-shadow:none;background:transparent;color:#fff5de;padding:5px 8px;font-size:14px;text-decoration:underline}
+.tutorial-pages{display:flex;justify-content:center;gap:7px;margin-top:9px}.tutorial-pages i{width:22px;height:6px;background:#ffffff35;border-radius:8px}.tutorial-pages .active{background:#ffcf59}
+.tutorial-card h2{font-size:clamp(23px,4.5vw,34px);margin:18px 0 8px;letter-spacing:-.03em;color:#ffe3a0;text-shadow:0 3px #073d4d}
+.tutorial-text{font-size:20px;font-weight:900;margin:15px 0 7px}.tutorial-hint{font-size:14px;line-height:1.45;margin:0 auto;max-width:420px;color:#cdece0;min-height:42px}
+.tutorial-nav{display:flex;align-items:center;justify-content:space-between;margin-top:20px;gap:12px}.tutorial-count{font-size:12px;color:#bce9d8;font-weight:900}
+.tutorial-stage{position:relative;height:210px;overflow:hidden;border-radius:18px;background:linear-gradient(#6fceda,#a2dfbc);border-bottom:6px solid #4f9a61}
+.demo-ground{position:absolute;bottom:39px;left:8%;right:8%;height:32px;border-radius:50%;background:#e8ce884f}
+.demo-champion,.demo-rival{position:absolute;width:50px;height:67px;bottom:60px;left:calc(50% - 25px);filter:drop-shadow(0 5px 0 #1f614b40);--team:#ed4e58}
+.demo-head{position:absolute;top:0;left:7px;width:36px;height:30px;background:#fff1cb;border-radius:16px 16px 12px 12px;border-top:7px solid #ffc653}
+.demo-head:after{content:'••';position:absolute;color:#173544;left:8px;top:0;font-size:18px;letter-spacing:4px}
+.demo-body{position:absolute;top:25px;left:4px;width:42px;height:31px;border-radius:15px 15px 10px 10px;background:var(--team);border-bottom:5px solid #ffc653}
+.demo-boots{position:absolute;top:54px;left:6px;width:16px;height:12px;border-radius:5px;background:#755037;box-shadow:22px 0 #755037}
+.demo-rival{--team:#287bdf;left:72%;display:none}
+[data-team=blue] .demo-champion{--team:#287bdf}[data-team=blue] .demo-rival{--team:#ed4e58}
+[data-team=blue] .demo-gate i{background:#377ee3}[data-team=blue] .demo-carried,[data-team=blue] .demo-blue-flag{color:#ec4d5b}[data-team=blue] .demo-pole{border-color:#377ee3}
+.demo-carried{display:none;position:absolute;top:-15px;left:28px;font-size:42px;color:#237ce1}
+.demo-arrows{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:8px}
+.tutorial-stage kbd{display:inline-block;color:#163f50;border:2px solid white;border-bottom:5px solid #d5bc84;border-radius:8px;background:#fff4cf;font:900 22px 'Trebuchet MS';padding:3px 12px}
+[data-step=move] .demo-champion{animation:tutorial-walk 4s infinite}
+.demo-arrows kbd{animation:tutorial-key 4s infinite}.demo-arrows kbd:nth-child(2){animation-delay:1s}.demo-arrows kbd:nth-child(3){animation-delay:2s}.demo-arrows kbd:nth-child(4){animation-delay:3s}
+.demo-gate{display:none;position:absolute;bottom:63px;left:44%;height:67px;width:72px;border:9px solid #835239;border-radius:6px;transform-origin:bottom;gap:3px;background:#a9683c;padding:3px}
+.demo-gate i{background:#f05c60;border:2px solid #ffc776;border-radius:3px;flex:1}
+.demo-battle-keys{display:none;position:absolute;bottom:12px;left:8px;right:8px;justify-content:center;gap:12px;font-size:11px;font-weight:900;color:#174655}
+.demo-battle-keys span{display:flex;align-items:center;gap:4px}.demo-battle-keys kbd{font-size:14px;padding:4px 7px;animation:tutorial-battle-key 8s infinite}
+.demo-battle-keys span:nth-child(2) kbd{animation-delay:2s}.demo-battle-keys span:nth-child(3) kbd{animation-delay:4s}.demo-battle-keys span:nth-child(4) kbd{animation-delay:6s}
+[data-step=battle] .demo-arrows,[data-step=flag] .demo-arrows{display:none}
+[data-step=battle] .demo-gate{display:flex;animation:tutorial-gate 8s infinite}
+[data-step=battle] .demo-champion{left:15%;animation:tutorial-shove 8s infinite}
+[data-step=battle] .demo-rival{display:block;animation:tutorial-hit 8s infinite}
+[data-step=battle] .demo-battle-keys{display:flex}
+.demo-blue-flag,.demo-pole{display:none;position:absolute;bottom:56px;font-size:64px;font-weight:900;color:#267de6;right:14%}
+.demo-pole{left:14%;right:auto;color:#ffca4e;font-size:35px;border-bottom:8px solid #f55a61;border-radius:50%;padding:0 10px}
+.demo-pole{height:76px;width:42px;padding:0;line-height:1}
+.demo-pole:after{content:'';position:absolute;left:18px;bottom:0;height:43px;width:6px;border-radius:3px;background:#ed4e58}
+[data-team=blue] .demo-pole:after{background:#377ee3}
+[data-step=flag] .demo-blue-flag,[data-step=flag] .demo-pole{display:block}
+[data-step=flag] .demo-blue-flag{animation:tutorial-pickup 5s infinite}
+[data-step=flag] .demo-champion{left:17%;animation:tutorial-capture 5s infinite}
+[data-step=flag] .demo-carried{display:block;animation:tutorial-carry 5s infinite}
+.tutorial-live{background:#ffc74d;color:#143c4e;padding:6px;border-radius:7px;font-size:12px;font-weight:900}
+#party-tutorial.nonblocking{background:none;backdrop-filter:none;pointer-events:none;place-items:start end;padding-top:100px}
+.nonblocking .tutorial-card{pointer-events:auto;width:330px;padding:14px;max-height:calc(100svh - 115px)}.nonblocking .tutorial-stage{height:155px}.nonblocking h2{font-size:23px}.nonblocking .tutorial-text{font-size:16px}.nonblocking .tutorial-hint{font-size:12px}.nonblocking .tutorial-nav{margin-top:10px}
+@keyframes tutorial-enter{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes tutorial-key{0%,23%{background:#ffc64d;transform:translateY(3px)}25%,100%{background:#fff4cf;transform:none}}
+@keyframes tutorial-walk{0%,100%{transform:translate(0,0)}24%{transform:translate(0,-26px)}49%{transform:translate(65px,-26px)}74%{transform:translate(65px,0)}}
+@keyframes tutorial-battle-key{0%,22%{background:#ffc64d;transform:translateY(3px)}25%,100%{background:#fff4cf;transform:none}}
+@keyframes tutorial-gate{0%{transform:scaleY(0)}8%{transform:scaleY(1.12)}15%,30%{transform:scaleY(1)}42%{transform:translate(8px,7px) rotate(14deg)}49%,100%{transform:translate(10px,70px) rotate(35deg);opacity:0}0%,40%{opacity:1}}
+@keyframes tutorial-shove{0%,50%,72%,100%{transform:none;filter:drop-shadow(0 5px 0 #1f614b40)}60%{transform:translateX(32px)}80%,90%{filter:drop-shadow(0 0 12px #ffe369)}}
+@keyframes tutorial-hit{0%,59%,100%{transform:none}65%,85%{transform:translateX(25px) rotate(14deg)}}
+@keyframes tutorial-capture{0%,10%,100%{transform:translateX(0)}42%,49%{transform:translateX(280px)}82%,95%{transform:translateX(0)}}
+@keyframes tutorial-pickup{0%,42%,99%,100%{opacity:1}45%,95%{opacity:0}}
+@keyframes tutorial-carry{0%,42%,96%,100%{opacity:0}45%,90%{opacity:1}}
+@media(max-width:600px){.tutorial-card{padding:18px}.tutorial-stage{height:190px}.demo-battle-keys{gap:5px}.demo-battle-keys span{flex-direction:column}.tutorial-text{font-size:17px}@keyframes tutorial-capture{0%,10%,100%{transform:translateX(0)}42%,49%{transform:translateX(45vw)}82%,95%{transform:translateX(0)}}}
+@media(max-height:560px){.tutorial-card{padding:12px 20px}.tutorial-card h2{margin:8px 0}.tutorial-stage{height:150px}.tutorial-hint{min-height:0}.tutorial-nav{margin-top:10px}}
+@media(prefers-reduced-motion:reduce){#party-tutorial *,#party-tutorial *:after{animation:none!important;transition:none!important}}

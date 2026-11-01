@@ -6,10 +6,13 @@
   <title>Wall Rush · Fort Rush Festival</title>
   <script>if(!location.search)location.replace('./');</script>
   <link rel="stylesheet" href="./src/style.css" />
+  <link rel="stylesheet" href="./src/tutorial.css" />
   <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
 </head>
 <body>
   <main id="app">
+    <nav class="play-tools" aria-label="Game tools"><a href="./" aria-label="Main menu">Menu</a><button id="game-help" type="button" aria-label="How to play">?</button></nav>
+    <div id="compact-hud" aria-label="Match status"><span id="compact-team"></span><span id="compact-walls"></span><span id="compact-power"></span><span id="compact-time">0:00</span><span id="compact-flags"></span><span id="compact-action"></span></div>
     <div id="game" aria-label="3D Wall Rush game"></div>
     <div class="hud">
       <div class="topbar">
